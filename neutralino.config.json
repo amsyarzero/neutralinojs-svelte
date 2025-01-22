@@ -30,10 +30,10 @@
 
     "frontendLibrary": {
       "patchFile": "/svelte-app/dist/index.html",
-      "devUrl": "http://localhost:5173", 
-      "projectPath": "/svelte-app/", 
-      "initCommand": "npm install", 
-      "devCommand": "npm run dev", 
+      "devUrl": "http://localhost:5173",
+      "projectPath": "/svelte-app/",
+      "initCommand": "npm install",
+      "devCommand": "node run-dev.js",
       "buildCommand": "npm run build"
     }
   }

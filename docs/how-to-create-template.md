@@ -188,7 +188,27 @@ neu run
 
 Those four commands above are a doozy, yeah? `cd` this <sub>cdeez nuts</sub> , `build` that. Let's enable the HMR feature so you only need to run one command and make the app refresh with every change you make.
 
-1. In `neutralino.config.json`, under the `cli` property, add these:
+1. Inside `./svelte-app/`, make a file called `run-dev.js` or anything similar.
+
+```js
+import { execSync } from "child_process";
+import fs from "fs";
+
+const distPath = "./dist/";
+
+if (!fs.existsSync(distPath)) {
+  console.log("Building project...");
+  execSync("npm run build", { stdio: "inherit" });
+}
+
+// Now run dev
+console.log("Starting dev server...");
+execSync("npm run dev", { stdio: "inherit" });
+```
+
+This will check if `./svelte-app/dist/` exists first. If no, it runs `npm run build` first, then `npm run dev`; else it skips straight to `npm run dev`.
+
+3. In `neutralino.config.json`, under the `cli` property, add these:
 
 ```json
 "cli" : {
@@ -199,7 +219,7 @@ Those four commands above are a doozy, yeah? `cd` this <sub>cdeez nuts</sub> , `
       "devUrl": "http://localhost:5173", // Vite server URL
       "projectPath": "/svelte-app/", // Svelte/Vite project path
       "initCommand": "npm install", // dependency install command
-      "devCommand": "npm run dev", // `neu run` runs this, and HMR also runs this with every change
+      "devCommand": "node run-dev.js", // `neu run` runs this, and HMR also runs this with every change
       "buildCommand": "npm run build" // `neu build` runs this
     }
 }
