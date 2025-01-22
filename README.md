@@ -7,7 +7,7 @@ This is a simple [Neutralinojs](https://neutralino.js.org/) template that uses [
 ## How to install
 
 1. Execute this command: `neu create app_name --template amsyarzero/neutralinojs-svelte`
-2. `cd` into `./neutralino-js/svelte-app`
+2. `cd` into `./app_name/svelte-app`
 3. Run `npm install`
 
 ## How to use

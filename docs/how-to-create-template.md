@@ -201,7 +201,6 @@ if (!fs.existsSync(distPath)) {
   execSync("npm run build", { stdio: "inherit" });
 }
 
-// Now run dev
 console.log("Starting dev server...");
 execSync("npm run dev", { stdio: "inherit" });
 ```
