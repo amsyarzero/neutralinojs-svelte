@@ -1,10 +1,14 @@
-import { execSync } from "child_process";
-import fs from "fs";
+/**
+ * This is a script to ensure `neu run` and `neu build` commands can be used correctly.
+ */
 
-const distPath = "./dist/"
+import { execSync } from "child_process";
+import { existsSync } from "node:fs";
+
+const distPath = "./dist/";
 
 // Check if dist/ exists, and if not, build first
-if (!fs.existsSync(distPath)) {
+if (!existsSync(distPath)) {
   console.log("Building project...");
   execSync("npm run build", { stdio: "inherit" });
 }

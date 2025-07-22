@@ -1,3 +1,7 @@
+/**
+ * This is a special Typescript file to handle window events with Neutralinojs.
+ */
+
 import { app, debug, events, window } from "@neutralinojs/lib";
 
 events

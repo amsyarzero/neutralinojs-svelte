@@ -1,8 +1,12 @@
 <script lang="ts">
-  let count: number = $state(0)
+  /**
+   * This is an example of a component that you can create in Svelte!
+   */
+
+  let count: number = $state(0);
   const increment = () => {
-    count += 1
-  }
+    count += 1;
+  };
 </script>
 
 <button onclick={increment}>

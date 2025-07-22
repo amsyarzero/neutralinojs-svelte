@@ -200,11 +200,11 @@ Those four commands above are a doozy, yeah? `cd` this, `build` that, `cdeez nut
 
 ```js
 import { execSync } from "child_process";
-import fs from "fs";
+import { existsSync } from "node:fs";
 
 const distPath = "./dist/";
 
-if (!fs.existsSync(distPath)) {
+if (!existsSync(distPath)) {
   console.log("Building project...");
   execSync("npm run build", { stdio: "inherit" });
 }
