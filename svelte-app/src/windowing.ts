@@ -1,22 +1,22 @@
-import Neutralino from "@neutralinojs/lib";
+import { app, debug, events, window } from "@neutralinojs/lib";
 
-Neutralino.events
+events
   .on("windowMaximize", () => {
-    Neutralino.window.maximize();
+    window.maximize();
   })
   .catch(console.error);
 
-Neutralino.events
+events
   .on("windowMinimize", () => {
-    Neutralino.window.minimize();
+    window.minimize();
   })
   .catch(console.error);
 
-Neutralino.events
+events
   .on("windowClose", () => {
-    Neutralino.app.exit(0).catch(console.error);
+    app.exit(0).catch(console.error);
   })
   .catch(console.error)
   .then(() => {
-    Neutralino.debug.log("Attached window closer").catch(console.error);
+    debug.log("Attached window closer").catch(console.error);
   });

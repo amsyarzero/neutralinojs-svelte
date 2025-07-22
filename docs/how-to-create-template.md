@@ -1,4 +1,4 @@
-# How to create the Neutralinojs Svelte template
+# How to create the Neutralinojs Svelte template 🦧
 
 This mostly serves as a guide for me, but it can be helpful for others too.
 
@@ -77,13 +77,17 @@ This should show up:
 
 ![The initial app provided by `neu run`.](neu-run.png)
 
-## WARNING: DO NOT PRESS THE MINIMISE OR MAXIMISE BUTTON FOR NOW.
+## DO NOT PRESS THE MINIMISE OR MAXIMISE BUTTON YET
 
-Neutralinojs has a bug in which **the application will suddenly disappear upon pressing either minimise or maximise**, forcing you to **redoing everything from beginning** (yes i'm not kidding).
+Neutralinojs has a bug in which **the application will suddenly disappear upon pressing either minimise or maximise**, forcing you to **redo everything from beginning** (yes i'm not kidding).
 
-The way to fix it is to attach window events, which will be discussed in the part afterwards.
+The way to fix it is to **attach window events**, which will be discussed in the part afterwards.
 
-## Adding the neutralinojs API
+## Adding the Neutralinojs API
+
+> Note: This section differs from [Neutralinojs' docs](https://neutralino.js.org/docs/getting-started/using-frontend-libraries/#initializing-native-api-with-neutralinojslib), where it asks to inject a code snippet inside `./public/index.html`. That is valid, this way is also valid. Up to you 😁
+
+### Steps
 
 1. Inside `./svelte-app/`, install `@neutralinojs/lib` from npm.
 
@@ -131,39 +135,43 @@ To test the API, let's fix the minimise-maximise problem.
   "nativeAllowList": ["app.*", "events.*", "window.*", "debug.*"],
 ```
 
-> NOTE: This allows for all functions under a namespace. You can be more specific and only allow certain functions e.g. `"window.maximize"`
+> NOTE: This allows for all functions under a namespace i.e. function category. You can be more specific and only allow certain functions e.g. `"window.maximize"`
 
 2. Inside anywhere in `./svelte-app/` (preferably in `svelte-app/src`), create a Typescript file e.g. `windowing.ts`.
 
-3. Add these lines inside `windowing.ts` (thanks Ori! 🙇🏽‍♂️):
+3. Add this code inside `windowing.ts` (thanks Ori! 🙇🏽‍♂️):
+
+> NOTE: If you also use the native JS' `window` functions for some reason, you **must** import Neutralinojs' `window` with an alias. e.g. `import { window as neuWindow } from "@neutralinojs/lib";`
 
 ```ts
-import Neutralino from "@neutralinojs/lib"; // cannot import specifics as `Neutralino.window` will clash with `window` property
+import { app, debug, events, window } from "@neutralinojs/lib";
 
-// check for maximise, minimise, and window close event
-Neutralino.events
+// check for maximise event
+events
   .on("windowMaximize", () => {
-    Neutralino.window.maximize();
+    window.maximize();
   })
   .catch(console.error);
 
-Neutralino.events
+// check for minimise event
+events
   .on("windowMinimize", () => {
-    Neutralino.window.minimize();
+    window.minimize();
   })
   .catch(console.error);
 
-Neutralino.events
+// check for window close event (just in case)
+events
   .on("windowClose", () => {
-    Neutralino.app.exit(0).catch(console.error);
+    app.exit(0).catch(console.error);
   })
   .catch(console.error)
   .then(() => {
-    Neutralino.debug.log("Attached window closer").catch(console.error);
+    debug.log("Attached window closer").catch(console.error);
   });
 ```
 
-This ensures that all three buttons (maximise, minimise, close) are handled properly (and also allow you to customise them too).
+This ensures that all three buttons (maximise, minimise, close) are handled properly (and also allow you to customise their actions too).
 
 4. In `./svelte-app/src/main.ts`, add this `import` line:
 
@@ -186,7 +194,7 @@ neu run
 
 ## Configuring hot module replacement (HMR) feature
 
-Those four commands above are a doozy, yeah? `cd` this <sub>cdeez nuts</sub> , `build` that. Let's enable the HMR feature so you only need to run one command and make the app refresh with every change you make.
+Those four commands above are a doozy, yeah? `cd` this, `build` that, `cdeez nuts`... so let's enable the HMR feature so you only need to run one command and make the app refresh with every change you make.
 
 1. Inside `./svelte-app/`, make a file called `run-dev.js` or anything similar.
 
@@ -205,7 +213,7 @@ console.log("Starting dev server...");
 execSync("npm run dev", { stdio: "inherit" });
 ```
 
-This will check if `./svelte-app/dist/` exists first. If no, it runs `npm run build` first, then `npm run dev`; else it skips straight to `npm run dev`.
+This will check if `./svelte-app/dist/` exists first, since it targets the builds there. If no, it runs `npm run build` first, then `npm run dev`; else it skips straight to `npm run dev`.
 
 3. In `neutralino.config.json`, under the `cli` property, add these:
 
@@ -224,10 +232,10 @@ This will check if `./svelte-app/dist/` exists first. If no, it runs `npm run bu
 }
 ```
 
-2. Instead of running the four commands above, **simply execute `neu run`**.
+2. Now, instead of running the usual four commands, **simply execute `neu run`**.
 
    The app will now open; now you can change anything inside `./svelte-app/src/App.svelte`, and the app will change immediately to reflect that 🎉
 
 3. To build the app, **execute `neu build`**. This will build two files inside `./dist`:
    - executables for Windows, macOS, and Linux
-   - `resources.neu`, which contains the app UI and functionality
+   - `resources.neu`, which contains the app UI and functionality. This **must** be bundled too.
